@@ -29,6 +29,7 @@ FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 # -----------------------------------
 # 1) EXTRACT - Geocoding
 # -----------------------------------
+@task(name="extract_geocoding")
 def get_lat_lon(city: str, country_code: str = "CR") -> tuple[float, float, str]:
     """
     Convierte un nombre de ciudad a (lat, lon) usando el Geocoding API de Open-Meteo.
@@ -55,6 +56,7 @@ def get_lat_lon(city: str, country_code: str = "CR") -> tuple[float, float, str]
 # -----------------------------------
 # 2) EXTRACT - Weather Forecast
 # -----------------------------------
+@task(name="extract_weatherforecast")
 def fetch_hourly_weather(lat: float, lon: float, timezone_name: str = "America/Costa_Rica") -> dict:
     """
     Extrae datos horarios (ej: temp, precipitación, viento) desde Open-Meteo.
@@ -73,6 +75,7 @@ def fetch_hourly_weather(lat: float, lon: float, timezone_name: str = "America/C
 # -----------------------------------
 # 3) STAGE - dict/json -> DataFrame temporal
 # -----------------------------------
+@task(name="stage_to_dataframe")
 def to_staging_df(weather_json: dict, location_name: str) -> pd.DataFrame:
     """
     Convierte la respuesta JSON a un DataFrame 'staging' (temporal).
@@ -99,6 +102,7 @@ def to_staging_df(weather_json: dict, location_name: str) -> pd.DataFrame:
 # -----------------------------------
 # 4) TRANSFORM - limpieza + tipos + features
 # -----------------------------------
+@task(name="transform_data")
 def transform(df: pd.DataFrame) -> pd.DataFrame:
     """
     Transformación típica:
@@ -131,7 +135,7 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
 # -----------------------------------
 # 5) LOAD - DataFrame -> MongoDB
 # -----------------------------------
-@task
+@task(name="load_to_mongo")
 def load_to_mongo(df: pd.DataFrame) -> int:
     """
     Inserta en MongoDB como documentos.
