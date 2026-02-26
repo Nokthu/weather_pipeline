@@ -191,7 +191,7 @@ def run(city: str = "San José", country_code: str = "CR"):
 
     # 5) load
     n = load_to_mongo(final_df)
-    print(f"\nListo ✅ Registros upserted (insert/update): {n}")
+    print(f"\nListo. Registros upserted (insert/update): {n}")
     print(f"Destino: {DB_NAME}.{COLLECTION_NAME}")
 
 if __name__ == "__main__":
