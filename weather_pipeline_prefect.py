@@ -13,7 +13,7 @@ import requests
 import pandas as pd
 from pymongo import MongoClient, ASCENDING
 from dotenv import load_dotenv
-from prefect import flow
+from prefect import flow, task
 
 # -----------------------------------
 # CONFIG
@@ -131,6 +131,7 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
 # -----------------------------------
 # 5) LOAD - DataFrame -> MongoDB
 # -----------------------------------
+@task
 def load_to_mongo(df: pd.DataFrame) -> int:
     """
     Inserta en MongoDB como documentos.
